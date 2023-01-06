@@ -20,16 +20,15 @@ namespace DioDocsBenchmarkApp1
     }
 
     [Config(typeof(MyConfig))]
-    [SimpleJob(RuntimeMoniker.Net60)] // .NET 6
-    [SimpleJob(RuntimeMoniker.Net50)] // .NET 5
-    //[SimpleJob(RuntimeMoniker.NetCoreApp31)] // .NET Core 3.1
+    //[SimpleJob(RuntimeMoniker.Net60)] // .NET 6
+    [SimpleJob(RuntimeMoniker.Net70)] // .NET 7
     public class Benchmark
     {
         [GlobalSetup]
         public static void Setup() => GrapeCity.Documents.Excel.Workbook.SetLicenseKey("製品版もしくはトライアル版のライセンスキーを設定");
 
         private const int ColumnNum = 100;
-        private const int RowNum = 100;
+        private const int RowNum = 1000;
 
         [Benchmark]
         public void DioDocs()
@@ -40,7 +39,7 @@ namespace DioDocsBenchmarkApp1
             {
                 for (var j = 1; j <= RowNum; j++)
                 {
-                    worksheet.Range[i, j].Value = "Hello World!";
+                    worksheet.Range[i, j].Value = "Hello World!" + i.ToString() + j.ToString();
                 }
             }
 
@@ -57,7 +56,7 @@ namespace DioDocsBenchmarkApp1
                 {
                     for (var j = 1; j <= RowNum; j++)
                     {
-                        worksheet.Cell(i, j).Value = "Hello World!";
+                        worksheet.Cell(i, j).Value = "Hello World!" + i.ToString() + j.ToString();
                     }
                 }
 
@@ -97,7 +96,7 @@ namespace DioDocsBenchmarkApp1
                         var cell = new Cell
                         {
                             DataType = CellValues.String,
-                            CellValue = new CellValue("Hello World!")
+                            CellValue = new CellValue("Hello World!" + i.ToString() + j.ToString())
                         };
                         row.Append(cell);
                         sheetData.Append(row);
@@ -120,7 +119,7 @@ namespace DioDocsBenchmarkApp1
                 {
                     for (var j = 1; j <= RowNum; j++)
                     {
-                        worksheet.Cells[i, j].Value = "Hello World!";
+                        worksheet.Cells[i, j].Value = "Hello World!" + i.ToString() + j.ToString();
                     }
                 }
                 package.SaveAs(Stream.Null);
@@ -136,7 +135,7 @@ namespace DioDocsBenchmarkApp1
             {
                 for (var j = 1; j <= RowNum; j++)
                 {
-                    worksheet.CreateRow(i).CreateCell(j).SetCellValue("Hello World!");
+                    worksheet.CreateRow(i).CreateCell(j).SetCellValue("Hello World!" + i.ToString() + j.ToString());
                 }
             }
             workbook.Write(Stream.Null);
