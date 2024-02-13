@@ -1,7 +1,7 @@
 # DioDocsBenchmarkApp1
-.NET 6と.NET 7でDioDocs for Excelのベンチマークを確かめてみる
+.NET 8でDioDocs for Excelのベンチマークを確かめてみる
 
-https://devlog.grapecity.co.jp/diodocs-dotnet6-benchmark/
+https://devlog.grapecity.co.jp/diodocs-dotnet8-benchmark/
 
 ![.NET 8で測定](https://github.com/GrapeCityJP/DioDocsBenchmarkApp1/blob/master/result-dotnet8-update.png)
 
