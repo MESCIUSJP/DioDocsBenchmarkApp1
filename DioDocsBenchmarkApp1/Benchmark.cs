@@ -21,7 +21,7 @@ namespace DioDocsBenchmarkApp1
 
     [Config(typeof(MyConfig))]
     //[SimpleJob(RuntimeMoniker.Net60)] // .NET 6
-    [SimpleJob(RuntimeMoniker.Net70)] // .NET 7
+    [SimpleJob(RuntimeMoniker.Net80)] // .NET 8
     public class Benchmark
     {
         [GlobalSetup]
@@ -105,7 +105,7 @@ namespace DioDocsBenchmarkApp1
 
                 workbookpart.Workbook.Save();
 
-                spreadsheetDocument.Close();
+                spreadsheetDocument.Dispose();
             }
         }
 
