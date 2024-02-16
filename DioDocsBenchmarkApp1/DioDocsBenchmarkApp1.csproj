@@ -10,7 +10,7 @@
     <PackageReference Include="BenchmarkDotNet" Version="0.13.12" />
     <PackageReference Include="ClosedXML" Version="0.102.2" />
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.20.0" />
-    <PackageReference Include="EPPlus" Version="7.0.8" />
+    <PackageReference Include="EPPlus" Version="7.0.9" />
     <PackageReference Include="GrapeCity.DioDocs.Excel.ja" Version="6.2.2" />
     <PackageReference Include="NPOI" Version="2.6.2" />
   </ItemGroup>
