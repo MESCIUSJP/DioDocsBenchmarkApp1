@@ -39,7 +39,7 @@ namespace DioDocsBenchmarkApp1
             {
                 for (var j = 1; j <= RowNum; j++)
                 {
-                    ////worksheet.Range[i, j].Value = "Hello World!" + i.ToString() + j.ToString();
+                    worksheet.Range[i, j].Value = "Hello World!" + i.ToString() + j.ToString();
                     //worksheet.Range[i, j].Value = "Hello World!";
                 }
             }
