@@ -13,10 +13,7 @@ namespace DioDocsBenchmarkApp1;
 
 public class MyConfig : ManualConfig
 {
-    public MyConfig()
-    {
-        WithOptions(ConfigOptions.DisableOptimizationsValidator);
-    }
+    public MyConfig() => WithOptions(ConfigOptions.DisableOptimizationsValidator);
 }
 
 [Config(typeof(MyConfig))]
@@ -44,7 +41,7 @@ public class Benchmark
         {
             for (var j = 1; j <= RowNum; j++)
             {
-                worksheet.Range[i, j].Value = "Hello World!" + i.ToString() + j.ToString();
+                worksheet.Range[i, j].Value = $"Hello World!{i}{j}";
             }
         }
 
@@ -54,94 +51,87 @@ public class Benchmark
     [Benchmark]
     public void ClosedXML()
     {
-        using (var workbook = new XLWorkbook())
+        using var workbook = new XLWorkbook();
+        var worksheet = workbook.Worksheets.Add("Sheet1");
+        for (var i = 1; i <= ColumnNum; i++)
         {
-            var worksheet = workbook.Worksheets.Add("Sheet1");
-            for (var i = 1; i <= ColumnNum; i++)
+            for (var j = 1; j <= RowNum; j++)
             {
-                for (var j = 1; j <= RowNum; j++)
-                {
-                    worksheet.Cell(i, j).Value = "Hello World!" + i.ToString() + j.ToString();
-                }
+                worksheet.Cell(i, j).Value = $"Hello World!{i}{j}";
             }
-
-            workbook.SaveAs(Stream.Null);
         }
+
+        workbook.SaveAs(Stream.Null);
     }
 
 
     [Benchmark]
     public void OpenXml()
     {
-        using (var spreadsheetDocument =
-            SpreadsheetDocument.Create(Stream.Null, SpreadsheetDocumentType.Workbook))
+        using var spreadsheetDocument =
+            SpreadsheetDocument.Create(Stream.Null, SpreadsheetDocumentType.Workbook);
+        var workbookpart = spreadsheetDocument.AddWorkbookPart();
+        workbookpart.Workbook = new DocumentFormat.OpenXml.Spreadsheet.Workbook();
+
+        var worksheetPart = workbookpart.AddNewPart<WorksheetPart>();
+        var sheetData = new SheetData();
+        worksheetPart.Worksheet = new Worksheet(sheetData);
+
+        var sheets = spreadsheetDocument.WorkbookPart.Workbook.AppendChild(new Sheets());
+
+        var sheet = new Sheet()
         {
-            var workbookpart = spreadsheetDocument.AddWorkbookPart();
-            workbookpart.Workbook = new DocumentFormat.OpenXml.Spreadsheet.Workbook();
+            Id = spreadsheetDocument.WorkbookPart.GetIdOfPart(worksheetPart),
+            SheetId = 1,
+            Name = "Sheet1"
+        };
+        sheets.Append(sheet);
 
-            var worksheetPart = workbookpart.AddNewPart<WorksheetPart>();
-            var sheetData = new SheetData();
-            worksheetPart.Worksheet = new Worksheet(sheetData);
-
-            var sheets = spreadsheetDocument.WorkbookPart.Workbook.AppendChild(new Sheets());
-
-            var sheet = new Sheet()
+        for (var i = 1; i <= ColumnNum; i++)
+        {
+            for (var j = 1; j <= RowNum; j++)
             {
-                Id = spreadsheetDocument.WorkbookPart.GetIdOfPart(worksheetPart),
-                SheetId = 1,
-                Name = "Sheet1"
-            };
-            sheets.Append(sheet);
-
-            for (var i = 1; i <= ColumnNum; i++)
-            {
-                for (var j = 1; j <= RowNum; j++)
+                var row = new Row();
+                var cell = new Cell
                 {
-                    var row = new Row();
-                    var cell = new Cell
-                    {
-                        DataType = CellValues.String,
-                        CellValue = new CellValue("Hello World!" + i.ToString() + j.ToString())
-                    };
-                    row.Append(cell);
-                    sheetData.Append(row);
-                }
+                    DataType = CellValues.String,
+                    CellValue = new CellValue($"Hello World!{i}{j}")
+                };
+                row.Append(cell);
+                sheetData.Append(row);
             }
-
-            workbookpart.Workbook.Save();
-
-            spreadsheetDocument.Dispose();
         }
+
+        workbookpart.Workbook.Save();
+
+        spreadsheetDocument.Dispose();
     }
 
     //[Benchmark]
     //public void EPPlus()
     //{
-    //    using (var package = new ExcelPackage())
+    //    using var package = new ExcelPackage();
+    //    var worksheet = package.Workbook.Worksheets.Add("Sheet1");
+    //    for (var i = 1; i <= ColumnNum; i++)
     //    {
-    //        var worksheet = package.Workbook.Worksheets.Add("Sheet1");
-    //        for (var i = 1; i <= ColumnNum; i++)
+    //        for (var j = 1; j <= RowNum; j++)
     //        {
-    //            for (var j = 1; j <= RowNum; j++)
-    //            {
-    //                worksheet.Cells[i, j].Value = "Hello World!" + i.ToString() + j.ToString();
-    //                //worksheet.Cells[i, j].Value = "Hello World!";
-    //            }
+    //            worksheet.Cells[i, j].Value = $"Hello World!{i}{j}";
     //        }
-    //        package.SaveAs(Stream.Null);
     //    }
+    //    package.SaveAs(Stream.Null);
     //}
 
     [Benchmark]
     public void NPOI()
     {
-        var workbook = new XSSFWorkbook();
+        using var workbook = new XSSFWorkbook();
         var worksheet = workbook.CreateSheet("Sheet1");
         for (var i = 1; i <= ColumnNum; i++)
         {
             for (var j = 1; j <= RowNum; j++)
             {
-                worksheet.CreateRow(i).CreateCell(j).SetCellValue("Hello World!" + i.ToString() + j.ToString());
+                worksheet.CreateRow(i).CreateCell(j).SetCellValue($"Hello World!{i}{j}");
             }
         }
         workbook.Write(Stream.Null);
