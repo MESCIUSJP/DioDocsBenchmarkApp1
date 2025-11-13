@@ -1,7 +1,7 @@
 # DioDocsBenchmarkApp1
 .NET 10でDioDocs for Excelのベンチマークを確かめてみる
 
-https://devlog.mescius.jp/diodocs-dotnet10-benchmark/
+https://devlog.mescius.jp/diodocs-excel-dotnet-10-benchmark/
 
 ![.NET 8で測定](https://github.com/MESCIUSJP/DioDocsBenchmarkApp1/blob/master/result-dotnet10-update.png)
 
