@@ -17,6 +17,7 @@ public class MyConfig : ManualConfig
 }
 
 [Config(typeof(MyConfig))]
+[MemoryDiagnoser]
 //[SimpleJob(RuntimeMoniker.Net90)] // .NET 9
 [SimpleJob(RuntimeMoniker.Net10_0)] // .NET 10
 public class Benchmark
@@ -24,7 +25,7 @@ public class Benchmark
     [GlobalSetup]
     public static void Setup()
     {
-        GrapeCity.Documents.Excel.Workbook.SetLicenseKey("製品版またはトライアル版のライセンスキーを入力");
+        //GrapeCity.Documents.Excel.Workbook.SetLicenseKey("製品版またはトライアル版のライセンスキーを入力");
         // https://epplussoftware.com/en/Home/GettingStartedCommunityLicense
         //ExcelPackage.License.SetNonCommercialPersonal("My Name");
     }
